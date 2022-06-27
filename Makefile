@@ -15,3 +15,6 @@ server: wasm
 	--name pong-server \
 	--rm \
     halverneus/static-file-server:latest
+
+deploy-surge: wasm
+	surge ./build https://pongbiten.surge.sh
