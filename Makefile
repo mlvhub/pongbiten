@@ -16,5 +16,6 @@ server: wasm
 	--rm \
     halverneus/static-file-server:latest
 
-deploy-surge: wasm
+.PHONY:deploy
+deploy: wasm
 	surge ./build https://pongbiten.surge.sh
