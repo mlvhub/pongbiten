@@ -57,7 +57,7 @@ func contextToImage(dc *gg.Context) (*ebiten.Image, error) {
 		return nil, errors.Wrap(err, "failed to encode image")
 	}
 
-	image, _, err := image.Decode(bytes.NewReader(b))
+	image, _, err := image.Decode(bytes.NewReader(buf.Bytes()))
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to decode image")
 	}
