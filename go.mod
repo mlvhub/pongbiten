@@ -4,7 +4,10 @@ go 1.18
 
 require github.com/hajimehoshi/ebiten/v2 v2.3.5
 
-require golang.org/x/text v0.3.7 // indirect
+require (
+	github.com/hajimehoshi/oto/v2 v2.1.0 // indirect
+	golang.org/x/text v0.3.7 // indirect
+)
 
 require (
 	github.com/fogleman/gg v1.3.0 // indirect

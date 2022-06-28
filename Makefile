@@ -1,5 +1,5 @@
 .PHONY: run
-desktop:
+run:
 	go run main.go
 
 .PHONY: wasm
@@ -8,13 +8,14 @@ wasm:
 
 .PHONY: server
 server: wasm
-	docker stop pong-server
+	docker stop pong-server || true
 	docker run -d \
     -v $(PWD)/build:/web \
     -p 8080:8080 \
 	--name pong-server \
 	--rm \
     halverneus/static-file-server:latest
+	open http://localhost:8080
 
 .PHONY:deploy
 deploy: wasm

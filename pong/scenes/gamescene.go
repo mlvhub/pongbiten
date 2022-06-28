@@ -15,6 +15,9 @@ import (
 const (
 	ballInitialVelocity = 8
 
+	player1Name = "Player 1"
+	player2Name = "Player 2"
+
 	playerOffset   = 20
 	playerVelocity = 8
 
@@ -47,21 +50,24 @@ type GameScene struct {
 
 type GameResults struct {
 	player1Score int
+	player1Name  string
+
 	player2Score int
+	player2Name  string
 }
 
 // TODO: shouldn't receive assets directly
 func NewGameScene(width, height int, assets *assets.Assets) (*GameScene, error) {
 	ballX, ballY := images.CenterPosition(assets.BallImage, width, height)
-	ball := ball.New(width, height, assets.BallImage, ballX, ballY, ballInitialVelocity)
+	ball := ball.New(width, height, assets.BallImage, ballX, ballY, ballInitialVelocity, assets)
 
 	_, playerY := images.CenterPosition(assets.PlayerImage, width, height)
 
-	player1 := player.New(height, assets.PlayerImage, playerOffset, playerY, playerVelocity, ebiten.KeyW, ebiten.KeyS)
+	player1 := player.New(player1Name, width, height, assets.PlayerImage, playerOffset, playerY, playerVelocity, player.Left())
 
 	w, _ := assets.PlayerImage.Size()
 	player2X := width - playerOffset - w
-	player2 := player.New(height, assets.PlayerImage, player2X, playerY, playerVelocity, ebiten.KeyArrowUp, ebiten.KeyArrowDown)
+	player2 := player.New(player2Name, width, height, assets.PlayerImage, player2X, playerY, playerVelocity, player.Right())
 
 	return &GameScene{
 		width:        width,
@@ -119,7 +125,7 @@ func (g *GameScene) Update() (*SceneType, error) {
 		g.readyTimer = maxReadyTimer
 		g.readyTimerEnabled = true
 		// we reset the ball as early as possible to avoid weird stuff when we start drawing the ball again
-		g.ball = ball.New(g.width, g.height, g.assets.BallImage, g.ballCenterX, g.ballCenterY, ballInitialVelocity)
+		g.ball = ball.New(g.width, g.height, g.assets.BallImage, g.ballCenterX, g.ballCenterY, ballInitialVelocity, g.assets)
 	}
 
 	if g.player1Score >= maxPlayerScore || g.player2Score >= maxPlayerScore {
@@ -146,13 +152,13 @@ func (g *GameScene) Draw(screen *ebiten.Image) {
 	g.player2.Draw(screen)
 
 	offset := 20
-	p1 := fmt.Sprintf("Player 1: %d", g.player1Score)
+	p1 := fmt.Sprintf("%s: %d", player1Name, g.player1Score)
 	p1Size := text.BoundString(g.assets.Font, p1)
 	p1X := offset
 	p1Y := p1Size.Dy() + offset
 	text.Draw(screen, p1, g.assets.Font, p1X, p1Y, colors.Black)
 
-	p2 := fmt.Sprintf("Player 2: %d", g.player2Score)
+	p2 := fmt.Sprintf("%s: %d", player2Name, g.player2Score)
 	p2Size := text.BoundString(g.assets.Font, p2)
 	p2X := g.width - p2Size.Dx() - offset
 	p2Y := p2Size.Dy() + offset
@@ -162,6 +168,9 @@ func (g *GameScene) Draw(screen *ebiten.Image) {
 func (g *GameScene) Results() *GameResults {
 	return &GameResults{
 		player1Score: g.player1Score,
+		player1Name:  player1Name,
+
 		player2Score: g.player2Score,
+		player2Name:  player2Name,
 	}
 }
