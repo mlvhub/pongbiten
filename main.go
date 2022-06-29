@@ -3,9 +3,10 @@ package main
 import (
 	"log"
 	"math/rand"
-	"pong/pong/assets"
-	"pong/pong/game"
 	"time"
+
+	"github.com/mlvhub/pongbiten/pongbiten/assets"
+	"github.com/mlvhub/pongbiten/pongbiten/game"
 
 	"github.com/hajimehoshi/ebiten/v2"
 )

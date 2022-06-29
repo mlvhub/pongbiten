@@ -1,4 +1,4 @@
-module pong
+module github.com/mlvhub/pongbiten
 
 go 1.18
 
