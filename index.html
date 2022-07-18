@@ -1,20 +1,26 @@
 <!DOCTYPE html>
 
-<script src="//cdn.jsdelivr.net/npm/eruda"></script>
-<script>eruda.init();</script>
+<script>
+    ; (function () {
+        var src = '//cdn.jsdelivr.net/npm/eruda@2.5.0';
+        if (!/eruda=true/.test(window.location) && localStorage.getItem('active-eruda') != 'true') return;
+        document.write('<scr' + 'ipt src="' + src + '"></scr' + 'ipt>');
+        document.write('<scr' + 'ipt>eruda.init({tool: ["console"]});</scr' + 'ipt>');
+    })();
+</script>
 
 <script src="wasm_exec.js"></script>
 <script>
-// Polyfill
-if (!WebAssembly.instantiateStreaming) {
-    WebAssembly.instantiateStreaming = async (resp, importObject) => {
-        const source = await (await resp).arrayBuffer();
-        return await WebAssembly.instantiate(source, importObject);
-    };
-}
+    // Polyfill
+    if (!WebAssembly.instantiateStreaming) {
+        WebAssembly.instantiateStreaming = async (resp, importObject) => {
+            const source = await (await resp).arrayBuffer();
+            return await WebAssembly.instantiate(source, importObject);
+        };
+    }
 
-const go = new Go();
-WebAssembly.instantiateStreaming(fetch("pongbiten.wasm"), go.importObject).then(result => {
-    go.run(result.instance);
-});
+    const go = new Go();
+    WebAssembly.instantiateStreaming(fetch("game.wasm"), go.importObject).then(result => {
+        go.run(result.instance);
+    });
 </script>
